@@ -388,6 +388,7 @@ var colorEngine = {
     warning: "#fb7f0b",
     error: "#f44336"
   },
+  font: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
   dark: false
 });
 var colorVariants = [{
@@ -452,6 +453,7 @@ function init$1(userOptions) {
 
   cssEngine.init();
   loadColors();
+  cssEngine.inject(":root", "--font", options.font);
 }
 
 var hellionApp = vue.reactive({
@@ -476,7 +478,7 @@ var hellionApp = vue.reactive({
 };
 function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   return vue.openBlock(), vue.createBlock("span", _hoisted_1$1, [vue.renderSlot(_ctx.$slots, "default")]);
-}var css_248z$1 = "\n@import \"/src/css/theme.css\";\r\n";
+}var css_248z$1 = "\n@import \"../../css/theme.css\";\r\n";
 styleInject(css_248z$1);script$1.render = render$1;var styleElement$1 = document.createElement("style");
 var classes$1 = [];
 
@@ -642,6 +644,10 @@ var cssEngine$1 = {
       type: [Number, String],
       default: "0.4"
     },
+    squared: {
+      type: Boolean,
+      default: false
+    },
     xSmall: {
       type: Boolean,
       default: false
@@ -685,20 +691,30 @@ var cssEngine$1 = {
   setup: function setup(props) {
     var id = vue.ref("btn_".concat(shortId())); // Default style
 
-    cssEngine$1.injectObject(".btn-".concat(props.color), {
-      "background-color": "var(--color-".concat(props.color, ")"),
-      color: "var(--color-".concat(props.color, "-text)"),
-      "box-shadow": "0 0px 0px 1px var(--color-".concat(props.color, "-lightest),\n       0 2px 30px 2px var(--color-").concat(props.color, "-transparent)")
-    }, false, true); // Active style
+    if (!props.outlined) {
+      cssEngine$1.injectObject(".btn-".concat(props.color), {
+        "background-color": "var(--color-".concat(props.color, ")"),
+        color: "var(--color-".concat(props.color, "-text)"),
+        "box-shadow": "0 0px 0px 1px var(--color-".concat(props.color, "-dark),\n       0 2px 20px 2px var(--color-").concat(props.color, "-transparent)")
+      }, false, true); // Active style
 
-    cssEngine$1.injectObject(".btn-".concat(props.color, ":active"), {
-      "background-color": "var(--color-".concat(props.color, "-dark)"),
-      "box-shadow": "0 0px 0px 1px var(--color-".concat(props.color, "-lightest), \n      0 5px 10px 3px var(--color-").concat(props.color, "-transparent)")
-    }, false, true);
-    vue.onBeforeUnmount(function () {
-      cssEngine$1.deleteClass("#".concat(id.value));
-      cssEngine$1.deleteClass("#".concat(id.value, ":active"));
-    });
+      cssEngine$1.injectObject(".btn-".concat(props.color, ":active"), {
+        "background-color": "var(--color-".concat(props.color, "-dark)"),
+        "box-shadow": "0 0px 0px 1px var(--color-".concat(props.color, "-dark), \n      0 5px 10px 2px var(--color-").concat(props.color, "-transparent)")
+      }, false, true);
+    } else {
+      cssEngine$1.injectObject(".btn-outlined-".concat(props.color), {
+        color: "var(--color-".concat(props.color, ")"),
+        "box-shadow": "0 0px 0px 2px var(--color-".concat(props.color, "-dark),\n       0 2px 20px 2px var(--color-").concat(props.color, "-transparent)")
+      }, false, true); // Active style
+
+      cssEngine$1.injectObject(".btn-outlined-".concat(props.color, ":active"), {
+        "background-color": "var(--color-".concat(props.color, "-transparent)"),
+        color: "var(--color-".concat(props.color, "-darker)"),
+        "box-shadow": "0 0px 0px 2px var(--color-".concat(props.color, "-dark), \n      0 5px 10px 2px var(--color-").concat(props.color, "-transparent)")
+      }, false, true);
+    }
+
     return {
       id: id
     };
@@ -707,18 +723,23 @@ var cssEngine$1 = {
   var _component_hellion_icon = vue.resolveComponent("hellion-icon");
 
   return vue.openBlock(), vue.createBlock("button", {
-    class: ["hellion-button", [_ctx.disabled || _ctx.loading ? _ctx.outlined ? "btn-disabled btn-disabled-outlined-".concat(_ctx.color) : "btn-disabled btn-disabled-".concat(_ctx.color) : _ctx.outlined ? "btn-outlined-".concat(_ctx.color) : "btn-".concat(_ctx.color),, _ctx.small ? 'btn-small' : _ctx.big ? 'btn-big' : _ctx.xSmall ? 'btn-x-small' : _ctx.xBig ? 'btn-x-big' : '', _ctx.iconLeft ? 'f-row-reverse' : '']],
+    class: ["hellion-button", [_ctx.disabled || _ctx.loading ? _ctx.outlined ? "btn-disabled btn-disabled-outlined-".concat(_ctx.color) : "btn-disabled btn-disabled-".concat(_ctx.color) : _ctx.outlined ? "btn-outlined-".concat(_ctx.color) : "btn-".concat(_ctx.color),, _ctx.squared ? _ctx.small ? 'btn-small-squared' : _ctx.big ? 'btn-big-squared' : _ctx.xSmall ? 'btn-x-small-squared' : _ctx.xBig ? 'btn-x-big-squared' : '' : _ctx.small ? 'btn-small' : _ctx.big ? 'btn-big' : _ctx.xSmall ? 'btn-x-small' : _ctx.xBig ? 'btn-x-big' : '', _ctx.squared ? 'btn-squared' : '']],
     id: _ctx.id,
     style: {
-      borderRadius: "".concat(_ctx.roundness, "rem")
+      borderRadius: "".concat(_ctx.roundness, "rem"),
+      flexDirection: _ctx.iconLeft ? 'row-reverse' : ''
     },
     disabled: _ctx.disabled || _ctx.loading
   }, [vue.createVNode("span", null, [vue.renderSlot(_ctx.$slots, "default")]), _ctx.icon || _ctx.loading ? (vue.openBlock(), vue.createBlock(_component_hellion_icon, {
     key: 0,
     class: _ctx.loading ? 'spin' : '',
-    name: _ctx.loading ? 'gg:spinner' : _ctx.icon
-  }, null, 8, ["class", "name"])) : vue.createCommentVNode("", true)], 14, ["id", "disabled"]);
-}var css_248z$2 = "\n.hellion-button {\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  padding: 0.625rem;\r\n  padding-left: 1rem;\r\n  padding-right: 1rem;\r\n  font-size: 1rem;\r\n  outline: none;\r\n  border: none;\r\n  box-sizing: border-box;\r\n  font-weight: 600;\r\n  cursor: pointer;\r\n  transition: all 0.2s;\r\n  margin: 0.4rem;\r\n  user-select: none;\r\n  max-width: calc(100vw - 2rem);\n}\n.btn-x-small {\r\n  padding: 0.425rem;\r\n  padding-left: 0.7rem;\r\n  padding-right: 0.7rem;\r\n  font-size: 0.7rem;\n}\n.btn-small {\r\n  padding: 0.525rem;\r\n  padding-left: 0.8rem;\r\n  padding-right: 0.8rem;\r\n  font-size: 0.8rem;\n}\n.btn-big {\r\n  padding: 0.825rem;\r\n  padding-left: 1.2rem;\r\n  padding-right: 1.2rem;\r\n  font-size: 1.2rem;\n}\n.btn-x-big {\r\n  padding: 0.925rem;\r\n  padding-left: 1.3rem;\r\n  padding-right: 1.3rem;\r\n  font-size: 1.3rem;\n}\n.btn-disabled {\r\n  pointer-events: none;\r\n  box-shadow: 0 0px 0px 0px;\n}\r\n";
+    name: _ctx.loading ? 'gg:spinner' : _ctx.icon,
+    style: {
+      marginLeft: _ctx.squared ? '' : _ctx.iconLeft ? '' : '0.4rem',
+      marginRight: _ctx.squared ? '' : _ctx.squared ? '' : _ctx.iconLeft ? '0.4rem' : ''
+    }
+  }, null, 8, ["class", "name", "style"])) : vue.createCommentVNode("", true)], 14, ["id", "disabled"]);
+}var css_248z$2 = "\n.hellion-button {\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  padding: 0.625rem;\r\n  padding-left: 1rem;\r\n  padding-right: 1rem;\r\n  font-size: 1rem;\r\n  outline: none;\r\n  border: none;\r\n  box-sizing: border-box;\r\n  font-weight: 600;\r\n  cursor: pointer;\r\n  transition: all 0.2s;\r\n  margin: 0.7rem;\r\n  user-select: none;\r\n  max-width: calc(100vw - 2rem);\r\n  background-color: transparent;\n}\n.btn-x-small {\r\n  padding: 0.425rem;\r\n  padding-left: 0.7rem;\r\n  padding-right: 0.7rem;\r\n  font-size: 0.7rem;\n}\n.btn-small {\r\n  padding: 0.525rem;\r\n  padding-left: 0.8rem;\r\n  padding-right: 0.8rem;\r\n  font-size: 0.8rem;\n}\n.btn-big {\r\n  padding: 0.825rem;\r\n  padding-left: 1.2rem;\r\n  padding-right: 1.2rem;\r\n  font-size: 1.2rem;\n}\n.btn-x-big {\r\n  padding: 0.925rem;\r\n  padding-left: 1.3rem;\r\n  padding-right: 1.3rem;\r\n  font-size: 1.3rem;\n}\n.btn-x-small-squared {\r\n  width: 2rem !important;\r\n  height: 2rem !important;\r\n  font-size: 0.7rem;\n}\n.btn-small-squared {\r\n  width: 2.4rem !important;\r\n  height: 2.4rem !important;\r\n  font-size: 1rem;\n}\n.btn-big-squared {\r\n  width: 3rem !important;\r\n  height: 3rem !important;\r\n  font-size: 1.2rem;\n}\n.btn-x-big-squared {\r\n  width: 3.2rem !important;\r\n  height: 3.2rem !important;\r\n  font-size: 1.4rem;\n}\n.btn-squared {\r\n  width: 2.6rem;\r\n  height: 2.6rem;\n}\n.btn-disabled {\r\n  pointer-events: none;\r\n  box-shadow: 0 0px 1px gray;\r\n  background-color: rgb(214, 214, 214);\r\n  color: rgb(98, 98, 98);\n}\r\n";
 styleInject(css_248z$2);script$3.render = render$3;/* eslint-disable import/prefer-default-export */var components=/*#__PURE__*/Object.freeze({__proto__:null,HellionUiSample: script,HellionApp: script$1,HellionButton: script$3});var install = function installHellionUi(app) {
   Object.entries(components).forEach(function (_ref) {
     var _ref2 = _slicedToArray(_ref, 2),

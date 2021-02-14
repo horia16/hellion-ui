@@ -7,6 +7,10 @@ declare const _default: import("vue").DefineComponent<{
         type: (StringConstructor | NumberConstructor)[];
         default: string;
     };
+    squared: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
     xSmall: {
         type: BooleanConstructor;
         default: boolean;
@@ -48,6 +52,7 @@ declare const _default: import("vue").DefineComponent<{
 }, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, Record<string, any>, string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<{
     color: string;
     roundness: string | number;
+    squared: boolean;
     xSmall: boolean;
     small: boolean;
     big: boolean;
@@ -60,6 +65,7 @@ declare const _default: import("vue").DefineComponent<{
 } & {}>, {
     color: string;
     roundness: string | number;
+    squared: boolean;
     xSmall: boolean;
     small: boolean;
     big: boolean;

@@ -9,4 +9,5 @@ export interface HellionOptions {
         [key: string]: string;
     };
     dark: boolean;
+    font: string;
 }
