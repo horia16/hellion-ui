@@ -1,0 +1,14 @@
+@import "./utils/vars.css";
+@import "./utils/animations.css";
+
+textarea,
+button,
+input.text,
+select,
+input[type="text"],
+input[type="button"],
+input[type="submit"],
+.input-checkbox {
+    -webkit-appearance: none;
+    font-family: var(--font);
+}
